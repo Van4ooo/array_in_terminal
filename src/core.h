@@ -1,5 +1,5 @@
-#ifndef SORT_VISUALIZATION_CORE_H
-#define SORT_VISUALIZATION_CORE_H
+#ifndef ARRAY_IN_TERMINAL_CORE_H
+#define ARRAY_IN_TERMINAL_CORE_H
 
 #include <iostream>
 #include <windows.h>
@@ -73,4 +73,4 @@ public:
 
 };
 
-#endif //SORT_VISUALIZATION_CORE_H
+#endif //ARRAY_IN_TERMINAL_CORE_H

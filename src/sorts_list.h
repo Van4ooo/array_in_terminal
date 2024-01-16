@@ -1,5 +1,5 @@
-#ifndef SORT_VISUALIZATION_SORTS_LIST_H
-#define SORT_VISUALIZATION_SORTS_LIST_H
+#ifndef ARRAY_IN_TERMINAL_SORT_LIST_H
+#define ARRAY_IN_TERMINAL_SORT_LIST_H
 
 #include "core.h"
 
@@ -35,4 +35,4 @@ namespace sorts{
     };
 }
 
-#endif //SORT_VISUALIZATION_SORTS_LIST_H
+#endif //ARRAY_IN_TERMINAL_SORT_LIST_H
