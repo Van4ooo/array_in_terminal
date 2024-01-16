@@ -7,6 +7,7 @@ void ArrayInTerminal::init_array(int *array, int size, int p){
     setting = GetStdHandle(STD_OUTPUT_HANDLE);
 
     wx = weight/size;
+    right_shift = weight - wx*size;
     hx = (float)height/(float)_max(array, size);
 
     last = array;
@@ -18,9 +19,8 @@ void ArrayInTerminal::init_array(int *array, int size, int p){
 int ArrayInTerminal::_max(int *array, int size){
     int max_el=array[0];
 
-    for(int i=0;i<size;i++){
+    for(int i=0;i<size;i++)
         max_el = std::max(max_el, array[i]);
-    }
 
     return max_el;
 }
@@ -89,29 +89,50 @@ void ArrayInTerminal::reset_color_rectangles_set(int i1) {
 }
 
 void ArrayInTerminal::first_print_array(const int *array, int size){
+    std::cout << BLUE;
+
     for(int i=0;i<size;i++)
         print_rectangles(i, array[i], 0);
 }
 
-void ArrayInTerminal::print_rectangles(int index, int el, int last_el) {
+void ArrayInTerminal::_write_rectangles(bool mod, int index, int el, int last_el) {
     int y = height_rectangles(el);
     int last_y = height_rectangles(last_el);
 
-    int x = index*wx;
+    int x = index*wx + right_shift;
 
-    for (int dy = y-1; dy >= last_y; dy--)
-        for (int i = x; i < x + wx; i++)
-                write_symbol(i, height - dy - 1,
-                         (i == x || i == x + wx - 1 ? '|' : '#'));
+    for (int dy = y; dy >= last_y; dy--)
+        for (int i = x + mod; i < x + wx - mod; i++) {
+            if (mod)
+                write_symbol(i, height - dy - 1, style.body);
+            else
+                write_symbol(i, height - dy - 1, ' ');
+        }
 
-    print_head(x, y);
+    if (mod) {
+        _write_border_rec(x, y, last_y);
+
+        if(wx > 1) _write_border_rec(x+wx-1, y, last_y);
+    }
+
+    print_head(x, mod ? y : last_y);
+}
+
+void ArrayInTerminal::_write_border_rec(int x, int y, int last_y) {
+    for (int dy = y; dy >= last_y; dy--)
+        write_symbol(x, height - dy - 1, style.border);
+}
+
+void ArrayInTerminal::print_rectangles(int index, int el, int last_el) {
+    _write_rectangles(true, index, el, last_el);
+}
+
+void ArrayInTerminal::clear_rectangles(int index, int el, int last_el){
+    _write_rectangles(false, index, el, last_el);
 }
 
 void ArrayInTerminal::print_table() {
-    position.X = 0;
-    position.Y = 0;
-
-    SetConsoleCursorPosition(setting, position);
+    write_symbol(0, 0, '-');
 
     std::cout << "---------------------\n    ";
     std::cout << name_alg << std::endl;
@@ -121,23 +142,13 @@ void ArrayInTerminal::print_table() {
     std::cout << "\n---------------------\n";
 }
 
-void ArrayInTerminal::clear_rectangles(int index, int el, int last_el){
-    int y = height_rectangles(el);
-    int last_y = height_rectangles(last_el);
-
-    int x = index*wx;
-
-    for (int dy = y; dy >= last_y; dy--)
-        for (int i = x; i < x + wx; i++)
-            write_symbol(i, height - dy - 1, ' ');
-
-    print_head(x, last_y);
-}
-
 void ArrayInTerminal::print_head(int x, int y) {
-    for (int i = x; i < x + wx; i++)
-        write_symbol(i, height - y - 1,
-                     (i == x || i == x + wx - 1 ? '.' : '_'));
+    write_symbol(x, height - y - 1, style.lf_corner);
+
+    for (int i = x+1; i < x + wx - 1; i++)
+        write_symbol(i, height - y - 1, style.head);
+
+    write_symbol(x + wx - 1, height - y - 1, style.rh_corner);
 }
 
 int ArrayInTerminal::height_rectangles(int el) const {
@@ -155,9 +166,16 @@ void ArrayInTerminal::write_symbol(int x, int y, char ch){
 void ArrayInTerminal::set_name_alg(char *name) {
     name_alg = name;
 
-    swap_counter = 0;
-    set_counter = 0;
+    swap_counter = 0;set_counter = 0;
     l1.index = -1;
+}
+
+void ArrayInTerminal::set_style_rec(const char *_style) {
+    style.body = _style[0];
+    style.border = _style[1];
+    style.head = _style[3];
+    style.lf_corner = _style[2];
+    style.rh_corner = _style[4];
 }
 
 void SortsVis::rand_array(int *array, int &size) {
@@ -184,3 +202,7 @@ void SortsVis::rand_run(int size, int pause) {
 }
 
 void SortsVis::run(int *, int, int){}
+
+[[maybe_unused]] void SortsVis::set_style(const char * _style) {
+    ait.set_style_rec(_style);
+}
