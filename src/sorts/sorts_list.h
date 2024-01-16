@@ -1,7 +1,7 @@
 #ifndef ARRAY_IN_TERMINAL_SORT_LIST_H
 #define ARRAY_IN_TERMINAL_SORT_LIST_H
 
-#include "core.h"
+#include "../core.h"
 
 namespace sorts{
 

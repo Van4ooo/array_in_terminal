@@ -4,11 +4,11 @@ project(array_in_terminal)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(array_in_terminal main.cpp
-        src/sorts_list.h
+        src/sorts/sorts_list.h
         src/core.cpp
-        src/bubble_sort.cpp
-        src/heap_sort.cpp
-        src/selection_sort.cpp
-        src/insertion_sort.cpp
-        src/merge_sort.cpp
+        src/sorts/bubble_sort.cpp
+        src/sorts/heap_sort.cpp
+        src/sorts/selection_sort.cpp
+        src/sorts/insertion_sort.cpp
+        src/sorts/merge_sort.cpp
 )
