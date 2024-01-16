@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.27)
-project(sort_visualization)
+project(array_in_terminal)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(sort_visualization main.cpp
+add_executable(array_in_terminal main.cpp
         src/sorts_list.h
         src/core.cpp
         src/bubble_sort.cpp
