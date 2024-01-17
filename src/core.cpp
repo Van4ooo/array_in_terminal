@@ -1,9 +1,11 @@
 #include <random>
-
 #include "core.h"
 
 void ArrayInTerminal::init_array(int *array, int size, int p){
-    system("mode 200, 46");
+    char form_string[15];
+    std::sprintf(form_string, "mode %i, %i", weight, height);
+
+    system(form_string);
     setting = GetStdHandle(STD_OUTPUT_HANDLE);
 
     wx = weight/size;
@@ -178,6 +180,11 @@ void ArrayInTerminal::set_style_rec(const char *_style) {
     style.rh_corner = _style[4];
 }
 
+void ArrayInTerminal::set_size_window(const int *_height, const int *_weight) {
+    height = (SHORT)*_height;
+    weight = (SHORT)*_weight;
+}
+
 void SortsVis::rand_array(int *array, int &size) {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -205,4 +212,8 @@ void SortsVis::run(int *, int, int){}
 
 [[maybe_unused]] void SortsVis::set_style(const char * _style) {
     ait.set_style_rec(_style);
+}
+
+[[maybe_unused]] void SortsVis::set_size_window(int _height, int _weight) {
+    ait.set_size_window(&_height, &_weight);
 }

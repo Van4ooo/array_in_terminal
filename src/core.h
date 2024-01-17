@@ -73,6 +73,7 @@ public:
     void set_name_alg(char *);
 
     [[maybe_unused]] void set_style_rec(const char *);
+    [[maybe_unused]] void set_size_window(const int*, const int*);
 };
 
 class SortsVis{
@@ -85,6 +86,7 @@ public:
     [[maybe_unused]] virtual void rand_run(int, int);
 
     [[maybe_unused]] void set_style(const char *);
+    [[maybe_unused]] void set_size_window(int, int);
 };
 
 #endif //ARRAY_IN_TERMINAL_CORE_H
