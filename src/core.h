@@ -7,7 +7,9 @@
 
 #define RESET "\033[0m"
 #define GREEN "\033[32m"
-#define BLUE "\033[34m"
+#define BLUE "\033[38;2;207;236;242m"
+#define ORANGE "\033[38;2;218;97;17m"
+#define PINK "\033[38;2;250;83;161m"
 
 struct Rectangles{
     int value;
@@ -20,6 +22,14 @@ struct StyleRec{
     char head = '_';
     char lf_corner = '.';
     char rh_corner = '.';
+};
+
+struct ColorStyle{
+    const char* REC = BLUE;
+    const char* SWAP = ORANGE;
+    const char* SET = PINK;
+    const char* FIRST_DRAW = BLUE;
+    const char* TABLE = GREEN;
 };
 
 class ArrayInTerminal{
@@ -39,6 +49,7 @@ public:
     std::string name_alg = "NONE";
     Rectangles l1{}, l2{};
     StyleRec style{};
+    ColorStyle colors{};
 
     char table_border_chr = '~';
     int table_w = 20;

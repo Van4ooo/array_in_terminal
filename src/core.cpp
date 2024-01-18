@@ -35,7 +35,7 @@ void ArrayInTerminal::swap(int* xp, int* yp, int i1, int i2){
 
     reset_color_rectangles(i1, i2);
 
-    std::cout << GREEN;
+    std::cout << colors.SWAP;
 
     if (*xp > *yp){
         print_rectangles(i1, last[i1], last[i2]);
@@ -56,7 +56,7 @@ void ArrayInTerminal::swap(int* xp, int* yp, int i1, int i2){
 void ArrayInTerminal::set(int *xp, int yp, int i1) {
     reset_color_rectangles_set(i1);
 
-    std::cout << GREEN;
+    std::cout << colors.SET;
 
     if (*xp < yp)
         print_rectangles(i1, yp, 0);
@@ -75,7 +75,7 @@ void ArrayInTerminal::set(int *xp, int yp, int i1) {
 }
 
 void ArrayInTerminal::reset_color_rectangles(int i1, int i2) {
-    std::cout << RESET;
+    std::cout << colors.REC;
 
     if (l1.index != -1){
         if (l1.index != i1) print_rectangles(l1.index, l1.value, 0);
@@ -87,7 +87,7 @@ void ArrayInTerminal::reset_color_rectangles(int i1, int i2) {
 }
 
 void ArrayInTerminal::reset_color_rectangles_set(int i1) {
-    std::cout << RESET;
+    std::cout << colors.REC;
 
     if (l1.index == -1 && l2.index != i1)
         print_rectangles(l2.index, last[l2.index], 0);
@@ -96,7 +96,7 @@ void ArrayInTerminal::reset_color_rectangles_set(int i1) {
 }
 
 void ArrayInTerminal::first_print_array(const int *array, int size){
-    std::cout << BLUE;
+    std::cout << colors.FIRST_DRAW;
 
     for(int i=0;i<size;i++)
         print_rectangles(i, array[i], 0);
@@ -139,6 +139,8 @@ void ArrayInTerminal::clear_rectangles(int index, int el, int last_el){
 }
 
 void ArrayInTerminal::print_table() {
+    std::cout << colors.TABLE;
+
     write_symbol(0, 0, table_border_chr);
     int free_chr = table_w - (int)name_alg.size();
 
