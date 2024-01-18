@@ -33,12 +33,16 @@ public:
     int *last{};
 
     int pause{};
-    int swap_counter{};
-    int set_counter{};
+    int swap_counter = 0;
+    int set_counter = 0;
 
-    char *name_alg{};
+    std::string name_alg = "NONE";
     Rectangles l1{}, l2{};
     StyleRec style{};
+
+    char table_border_chr = '~';
+    int table_w = 20;
+    int table_h = 2;
 
     void init_array(int *, int, int);
 
@@ -70,7 +74,9 @@ public:
 
     void write_symbol(int, int, char);
 
-    void set_name_alg(char *);
+    void write_symbol_with_checking(int, int, char);
+
+    void set_name_alg(std::string);
 
     [[maybe_unused]] void set_style_rec(const char *);
     [[maybe_unused]] void set_size_window(const int*, const int*);

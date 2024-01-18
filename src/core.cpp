@@ -13,6 +13,7 @@ void ArrayInTerminal::init_array(int *array, int size, int p){
     hx = (float)height/(float)_max(array, size);
 
     last = array;
+    l1.index = -1;
     pause = p;
 
     first_print_array(array, size);
@@ -46,7 +47,9 @@ void ArrayInTerminal::swap(int* xp, int* yp, int i1, int i2){
 
     usleep(1000*pause);
 
-    swap_counter++;
+    if (swap_counter++ == 1)
+        table_h++;
+
     print_table();
 }
 
@@ -65,7 +68,9 @@ void ArrayInTerminal::set(int *xp, int yp, int i1) {
     *xp = yp;
     usleep(1000*pause);
 
-    set_counter++;
+    if (set_counter++ == 1)
+        table_h++;
+
     print_table();
 }
 
@@ -103,12 +108,12 @@ void ArrayInTerminal::_write_rectangles(bool mod, int index, int el, int last_el
 
     int x = index*wx + right_shift;
 
-    for (int dy = y; dy >= last_y; dy--)
-        for (int i = x + mod; i < x + wx - mod; i++) {
+    for (int dy = y; dy <= last_y; dy++)
+        for (int dx = x + mod; dx < x + wx - mod; dx++) {
             if (mod)
-                write_symbol(i, height - dy - 1, style.body);
+                write_symbol_with_checking(dx, dy, style.body);
             else
-                write_symbol(i, height - dy - 1, ' ');
+                write_symbol_with_checking(dx, dy, ' ');
         }
 
     if (mod) {
@@ -116,13 +121,13 @@ void ArrayInTerminal::_write_rectangles(bool mod, int index, int el, int last_el
 
         if(wx > 1) _write_border_rec(x+wx-1, y, last_y);
     }
-
     print_head(x, mod ? y : last_y);
 }
 
 void ArrayInTerminal::_write_border_rec(int x, int y, int last_y) {
-    for (int dy = y; dy >= last_y; dy--)
-        write_symbol(x, height - dy - 1, style.border);
+    for (int dy = y; dy <= last_y; dy++) {
+        write_symbol_with_checking(x, dy, style.border);
+    }
 }
 
 void ArrayInTerminal::print_rectangles(int index, int el, int last_el) {
@@ -134,27 +139,36 @@ void ArrayInTerminal::clear_rectangles(int index, int el, int last_el){
 }
 
 void ArrayInTerminal::print_table() {
-    write_symbol(0, 0, '-');
+    write_symbol(0, 0, table_border_chr);
+    int free_chr = table_w - (int)name_alg.size();
 
-    std::cout << "---------------------\n    ";
-    std::cout << name_alg << std::endl;
+    for(int i=0; i<(free_chr/2 - 1);i++)
+        std::cout << table_border_chr;
 
-    std::cout << "   SWAP_COUNTER: " << swap_counter;
-    std::cout << "\n   SET_COUNTER: " << set_counter;
-    std::cout << "\n---------------------\n";
+    std::cout << name_alg;
+    for(int i=0; i<(free_chr/2 + free_chr%2);i++)
+        std::cout << table_border_chr;
+
+    std::cout << std::endl;
+
+    if (swap_counter) printf(" SWAP_COUNTER: %i\n", swap_counter);
+    if (set_counter) printf(" SET_COUNTER: %i\n", set_counter);
+
+    for(int i=0;i<table_w;i++)
+        std::cout << table_border_chr;
 }
 
 void ArrayInTerminal::print_head(int x, int y) {
-    write_symbol(x, height - y - 1, style.lf_corner);
+    write_symbol_with_checking(x, y, style.lf_corner);
 
     for (int i = x+1; i < x + wx - 1; i++)
-        write_symbol(i, height - y - 1, style.head);
+        write_symbol_with_checking(i, y, style.head);
 
-    write_symbol(x + wx - 1, height - y - 1, style.rh_corner);
+    write_symbol_with_checking(x + wx - 1, y, style.rh_corner);
 }
 
 int ArrayInTerminal::height_rectangles(int el) const {
-    return el ? (int)((float)(el-_min)*hx-1) : 0;
+    return height - (el ? (int)((float)(el-_min)*hx-1) : 0) - 1;
 }
 
 void ArrayInTerminal::write_symbol(int x, int y, char ch){
@@ -165,11 +179,14 @@ void ArrayInTerminal::write_symbol(int x, int y, char ch){
     std::cout << ch;
 }
 
-void ArrayInTerminal::set_name_alg(char *name) {
-    name_alg = name;
+void ArrayInTerminal::write_symbol_with_checking(int x, int y, char ch) {
+    if (y < table_h && x < table_w) return;
 
-    swap_counter = 0;set_counter = 0;
-    l1.index = -1;
+    write_symbol(x, y, ch);
+}
+
+void ArrayInTerminal::set_name_alg(std::string name) {
+    name_alg = std::move(name);
 }
 
 void ArrayInTerminal::set_style_rec(const char *_style) {
