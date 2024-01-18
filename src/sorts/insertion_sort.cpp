@@ -2,7 +2,7 @@
 
 
 void sorts::InsertionSort::run(int *array, int size, int pause) {
-    ait.set_name_alg((char *)"INSERTION_SORT");
+    ait.set_name_alg("INSERTION_SORT");
     ait.init_array(array, size, pause);
 
     int i, key, j;

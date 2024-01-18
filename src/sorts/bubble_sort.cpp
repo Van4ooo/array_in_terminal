@@ -1,7 +1,7 @@
 #include "sorts_list.h"
 
 void sorts::BubbleSort::run(int * array, int size, int pause) {
-    ait.set_name_alg((char *)"BUBBLE_SORT");
+    ait.set_name_alg("BUBBLE_SORT");
     ait.init_array(array, size, pause);
 
     int i, j;

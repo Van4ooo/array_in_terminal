@@ -1,7 +1,7 @@
 #include "sorts_list.h"
 
 [[maybe_unused]] void sorts::HeapSort::run(int *array, int size, int pause){
-    ait.set_name_alg((char *)"HEAP_SORT");
+    ait.set_name_alg("HEAP_SORT");
     ait.init_array(array, size, pause);
 
     for (int i = size/2 - 1; i>=0; i--)

@@ -2,7 +2,7 @@
 
 
 [[maybe_unused]] void sorts::SelectionSort::run(int *array, int size, int pause) {
-    ait.set_name_alg((char *)"SELECTION_SORT");
+    ait.set_name_alg("SELECTION_SORT");
     ait.init_array(array, size, pause);
 
     int i, j, min_idx;

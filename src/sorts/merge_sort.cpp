@@ -2,7 +2,7 @@
 
 
 [[maybe_unused]] void sorts::MergeSort::run(int *array, int size, int pause) {
-    ait.set_name_alg((char *)"MERGE_SORT");
+    ait.set_name_alg("MERGE_SORT");
     ait.init_array(array, size, pause);
 
     merge_sort(array, 0, size-1);
