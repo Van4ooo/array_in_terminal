@@ -11,4 +11,9 @@ add_executable(array_in_terminal main.cpp
         src/sorts/selection_sort.cpp
         src/sorts/insertion_sort.cpp
         src/sorts/merge_sort.cpp
+        src/sorts/cocktail_sort.cpp
+        src/sorts/quick_sort.cpp
+        src/sorts/smooth_sort.cpp
+        src/sorts/bogo_sort.cpp
+        src/sorts/radix_sort.cpp
 )

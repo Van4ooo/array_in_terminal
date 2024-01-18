@@ -3,13 +3,13 @@
 using namespace sorts;
 
 int main() {
-    HeapSort{}.rand_run(50, 50);
-    MergeSort{}.rand_run(200, 10);
+    RadixSort{}.rand_run(200, 20);
+    QuickSort{}.rand_run(200, 20);
+    CocktailSort{}.rand_run(200, 0);
 
-    InsertionSort t = InsertionSort{};
-    t.set_style("#|o_O");
-    t.set_size_window(46, 180);
-    t.rand_run(60, 20);
+    BogoSort t = BogoSort{};
+    t.set_size_window(46, 49);
+    t.rand_run(7, 0);
 
     getchar();
     return 0;
