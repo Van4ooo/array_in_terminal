@@ -1,8 +1,8 @@
 #include "sorts_list.h"
 
 void sorts::CocktailSort::run(int * array, int size, int pause) {
-    ait.set_name_alg("COCKTAIL_SORT");
-    ait.init_array(array, size, pause);
+    ait->set_name_alg("COCKTAIL_SORT");
+    init_ait(array, size, pause);
 
     bool swapped = true;
     int start = 0;
@@ -13,7 +13,7 @@ void sorts::CocktailSort::run(int * array, int size, int pause) {
 
         for (int i = start; i < end; i++) {
             if (array[i] > array[i + 1]) {
-                ait.swap(&array[i], &array[i + 1], i, i+1);
+                ait->swap(&array[i], &array[i + 1], i, i+1);
                 swapped = true;
             }
         }
@@ -25,10 +25,12 @@ void sorts::CocktailSort::run(int * array, int size, int pause) {
 
         for (int i = end - 1; i >= start; i--) {
             if (array[i] > array[i + 1]) {
-                ait.swap(&array[i], &array[i + 1], i, i+1);
+                ait->swap(&array[i], &array[i + 1], i, i+1);
                 swapped = true;
             }
         }
         start++;
     }
+
+    ait->_sorted();
 }

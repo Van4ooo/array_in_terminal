@@ -1,13 +1,15 @@
 #include "sorts_list.h"
 
 void sorts::RadixSort::run(int *array, int size, int pause) {
-    ait.set_name_alg("RADIX_SORT");
-    ait.init_array(array, size, pause);
+    ait->set_name_alg("RADIX_SORT");
+    init_ait(array, size, pause);
 
     int m = _max(array, size);
 
     for (int exp = 1; m / exp > 0; exp *= 10)
         count_sort(array, size, exp);
+
+    ait->_sorted();
 }
 
 int sorts::RadixSort::_max(int *array, int size) {
@@ -35,5 +37,5 @@ void sorts::RadixSort::count_sort(int *array, int size, int exp) {
     }
 
     for (i = 0; i < size; i++)
-        ait.set(&array[i], output[i], i);
+        ait->set(&array[i], output[i], i);
 }

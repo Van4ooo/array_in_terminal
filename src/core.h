@@ -5,7 +5,6 @@
 #include <windows.h>
 #include <unistd.h>
 
-#define RESET "\033[0m"
 #define GREEN "\033[32m"
 #define BLUE "\033[38;2;207;236;242m"
 #define ORANGE "\033[38;2;218;97;17m"
@@ -30,10 +29,11 @@ struct ColorStyle{
     const char* SET = PINK;
     const char* FIRST_DRAW = BLUE;
     const char* TABLE = GREEN;
+    const char* SORTED = GREEN;
 };
 
 class ArrayInTerminal{
-public:
+private:
     HANDLE setting{};
     COORD position{};
     SHORT height=46, weight=200;
@@ -41,12 +41,13 @@ public:
     int wx{}, _min{}, right_shift{};
     float hx{};
     int *last{};
+    int last_size{};
 
     int pause{};
     int swap_counter = 0;
     int set_counter = 0;
 
-    std::string name_alg = "NONE";
+    std::string name_alg = "SHUFFLE";
     Rectangles l1{}, l2{};
     StyleRec style{};
     ColorStyle colors{};
@@ -54,6 +55,10 @@ public:
     char table_border_chr = '~';
     int table_w = 20;
     int table_h = 2;
+
+public:
+    bool shuffle = false;
+    bool _init = false;
 
     void init_array(int *, int, int);
 
@@ -71,7 +76,11 @@ public:
 
     void _write_border_rec(int, int, int);
 
+    void _sorted();
+
     void print_table();
+
+    void clear_table();
 
     void reset_color_rectangles(int, int);
 
@@ -90,20 +99,27 @@ public:
     void set_name_alg(std::string);
 
     [[maybe_unused]] void set_style_rec(const char *);
-    [[maybe_unused]] void set_size_window(const int*, const int*);
+    [[maybe_unused]] void set_size_window(int, int);
 };
 
 class SortsVis{
 public:
-    ArrayInTerminal ait;
+    ArrayInTerminal *ait{};
 
-    static void rand_array(int *, int &);
+    explicit SortsVis(ArrayInTerminal *);
+
+    void rand_array(int *, int &) const;
+    static void init_array(int *, int);
+
+    void init_ait(int *, int, int) const;
+    static bool sorted(const int *, int);
 
     [[maybe_unused]] virtual void run(int *, int, int);
+
     [[maybe_unused]] virtual void rand_run(int, int);
 
-    [[maybe_unused]] void set_style(const char *);
-    [[maybe_unused]] void set_size_window(int, int);
+    [[maybe_unused]] void set_style(const char *) const;
+    [[maybe_unused]] void set_size_window(int, int) const;
 };
 
 #endif //ARRAY_IN_TERMINAL_CORE_H

@@ -2,8 +2,8 @@
 
 
 void sorts::BogoSort::run(int *array, int size, int pause) {
-    ait.set_name_alg("BOGO_SORT");
-    ait.init_array(array, size, pause);
+    ait->set_name_alg("BOGO_SORT");
+    init_ait(array, size, pause);
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -11,6 +11,8 @@ void sorts::BogoSort::run(int *array, int size, int pause) {
 
     while (!is_sorted(array, size))
         shuffle(array, size);
+
+    ait->_sorted();
 }
 
 bool sorts::BogoSort::is_sorted(const int *array, int size) {
@@ -25,6 +27,6 @@ void sorts::BogoSort::shuffle(int *array, int size) {
     std::uniform_int_distribution<> distribution(0, size-1);
     for(int i=0;i<size;i++) {
         int r = distribution(_gen);
-        ait.swap(&array[i], &array[r], i, r);
+        ait->swap(&array[i], &array[r], i, r);
     }
 }

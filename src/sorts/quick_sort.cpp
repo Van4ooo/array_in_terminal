@@ -1,10 +1,11 @@
 #include "sorts_list.h"
 
 void sorts::QuickSort::run(int *array, int size, int pause) {
-    ait.set_name_alg("QUICK_SORT");
-    ait.init_array(array, size, pause);
+    ait->set_name_alg("QUICK_SORT");
+    init_ait(array, size, pause);
 
     quick_sort(array, 0, size-1);
+    ait->_sorted();
 }
 
 void sorts::QuickSort::quick_sort(int *array, int low, int high) {
@@ -24,9 +25,9 @@ int sorts::QuickSort::partition(int *array, int low, int high) {
     for(int j=low;j<=high;j++){
         if(array[j]<pivot){
             i++;
-            ait.swap(&array[i], &array[j], i, j);
+            ait->swap(&array[i], &array[j], i, j);
         }
     }
-    ait.swap(&array[i+1], &array[high], i+1, high);
+    ait->swap(&array[i+1], &array[high], i+1, high);
     return (i+1);
 }

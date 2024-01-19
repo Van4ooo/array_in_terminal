@@ -2,8 +2,8 @@
 
 
 [[maybe_unused]] void sorts::SelectionSort::run(int *array, int size, int pause) {
-    ait.set_name_alg("SELECTION_SORT");
-    ait.init_array(array, size, pause);
+    ait->set_name_alg("SELECTION_SORT");
+    init_ait(array, size, pause);
 
     int i, j, min_idx;
 
@@ -15,6 +15,8 @@
         }
 
         if (min_idx != i)
-            ait.swap(&array[min_idx], &array[i], min_idx, i);
+            ait->swap(&array[min_idx], &array[i], min_idx, i);
     }
+
+    ait->_sorted();
 }

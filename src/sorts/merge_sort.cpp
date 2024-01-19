@@ -2,10 +2,11 @@
 
 
 [[maybe_unused]] void sorts::MergeSort::run(int *array, int size, int pause) {
-    ait.set_name_alg("MERGE_SORT");
-    ait.init_array(array, size, pause);
+    ait->set_name_alg("MERGE_SORT");
+    init_ait(array, size, pause);
 
     merge_sort(array, 0, size-1);
+    ait->_sorted();
 }
 
 [[maybe_unused]] void sorts::MergeSort::merge(
@@ -26,24 +27,24 @@
 
     while (i_sub_one < sub_one && i_sub_two < sub_two) {
         if (arr_left[i_sub_one] <= arr_right[i_sub_two]) {
-            ait.set(&array[index_merged], arr_left[i_sub_one], index_merged);
+            ait->set(&array[index_merged], arr_left[i_sub_one], index_merged);
             i_sub_one++;
         } else {
-            ait.set(&array[index_merged], arr_right[i_sub_two], index_merged);
+            ait->set(&array[index_merged], arr_right[i_sub_two], index_merged);
             i_sub_two++;
         }
         index_merged++;
     }
 
     while (i_sub_one < sub_one) {
-        ait.set(&array[index_merged], arr_left[i_sub_one], index_merged);
+        ait->set(&array[index_merged], arr_left[i_sub_one], index_merged);
 
         i_sub_one++;
         index_merged++;
     }
 
     while (i_sub_two < sub_two) {
-        ait.set(&array[index_merged], arr_right[i_sub_two], index_merged);
+        ait->set(&array[index_merged], arr_right[i_sub_two], index_merged);
 
         i_sub_two++;
         index_merged++;

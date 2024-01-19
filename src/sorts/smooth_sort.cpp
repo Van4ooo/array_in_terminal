@@ -1,9 +1,10 @@
 #include "sorts_list.h"
 
 void sorts::SmoothSort::run(int *arr, int size, int pause) {
-    ait.set_name_alg("SMOOTH_SORT");
-    ait.init_array(arr, size, pause);
+    ait->set_name_alg("SMOOTH_SORT");
+    init_ait(arr, size, pause);
 
+    ait->_sorted();
 }
 
 int sorts::SmoothSort::leonardo(int k) {

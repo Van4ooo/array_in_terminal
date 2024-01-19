@@ -1,22 +1,28 @@
 #include <random>
+#include <utility>
 #include "core.h"
 
 void ArrayInTerminal::init_array(int *array, int size, int p){
-    char form_string[15];
-    std::sprintf(form_string, "mode %i, %i", weight, height);
-
-    system(form_string);
-    setting = GetStdHandle(STD_OUTPUT_HANDLE);
-
+    if (!_init) {
+        set_size_window(height, weight);
+        setting = GetStdHandle(STD_OUTPUT_HANDLE);
+    }
     wx = weight/size;
     right_shift = weight - wx*size;
     hx = (float)height/(float)_max(array, size);
 
     last = array;
+    last_size = size;
     l1.index = -1;
     pause = p;
 
-    first_print_array(array, size);
+    set_counter = 0;
+    swap_counter = 0;
+    table_h = 2;
+
+    if (!_init) first_print_array(array, size);
+
+    _init = true;
 }
 
 int ArrayInTerminal::_max(int *array, int size){
@@ -47,6 +53,9 @@ void ArrayInTerminal::swap(int* xp, int* yp, int i1, int i2){
 
     usleep(1000*pause);
 
+    if(shuffle)
+        return;
+
     if (swap_counter++ == 1)
         table_h++;
 
@@ -67,6 +76,9 @@ void ArrayInTerminal::set(int *xp, int yp, int i1) {
 
     *xp = yp;
     usleep(1000*pause);
+
+    if(shuffle)
+        return;
 
     if (set_counter++ == 1)
         table_h++;
@@ -108,7 +120,7 @@ void ArrayInTerminal::_write_rectangles(bool mod, int index, int el, int last_el
 
     int x = index*wx + right_shift;
 
-    for (int dy = y; dy <= last_y; dy++)
+    for (int dy = y + mod; dy <= last_y; dy++)
         for (int dx = x + mod; dx < x + wx - mod; dx++) {
             if (mod)
                 write_symbol_with_checking(dx, dy, style.body);
@@ -160,6 +172,12 @@ void ArrayInTerminal::print_table() {
         std::cout << table_border_chr;
 }
 
+void ArrayInTerminal::clear_table() {
+    for (int dy=0;dy<table_h;dy++)
+        for(int dx=0;dx<table_w;dx++)
+            write_symbol(dx, dy, ' ');
+}
+
 void ArrayInTerminal::print_head(int x, int y) {
     write_symbol_with_checking(x, y, style.lf_corner);
 
@@ -199,40 +217,80 @@ void ArrayInTerminal::set_style_rec(const char *_style) {
     style.rh_corner = _style[4];
 }
 
-void ArrayInTerminal::set_size_window(const int *_height, const int *_weight) {
-    height = (SHORT)*_height;
-    weight = (SHORT)*_weight;
+void ArrayInTerminal::set_size_window(int _height, int _weight) {
+    height = (SHORT)_height;
+    weight = (SHORT)_weight;
+
+    char form_string[15];
+    std::sprintf(form_string, "mode %i, %i", weight, height);
+
+    system(form_string);
 }
 
-void SortsVis::rand_array(int *array, int &size) {
+void ArrayInTerminal::_sorted() {
+    std::cout << colors.SORTED;
+
+    for(int i=0;i<last_size;i++) {
+        print_rectangles(i, last[i], 0);
+        usleep(900);
+    }
+}
+
+SortsVis::SortsVis(ArrayInTerminal *a) : ait(a){
+}
+
+void SortsVis::rand_array(int *array, int &size) const {
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    for (int i=0;i<size;i++)array[i] = i;
+    ait->init_array(array, size, 0);
+    ait->shuffle = true;
 
     for (int i = size - 1; i > 0; i--){
         std::uniform_int_distribution<> distribution(0, i+1);
         int j = distribution(gen);
 
-        std::swap(array[i], array[j]);
+        ait->swap(&array[i], &array[j], i, j);
     }
+    ait->shuffle = false;
+    ait->clear_table();
+}
+
+void SortsVis::init_array(int *array, int size) {
+    for (int i=0;i<size;i++) array[i] = i;
 }
 
 void SortsVis::rand_run(int size, int pause) {
     int *array = new int[size];
 
+    ait->_init = false;
+
+    init_array(array, size);
     rand_array(array, size);
     run(array, size, pause);
 
     delete[] array;
 }
 
-void SortsVis::run(int *, int, int){}
-
-[[maybe_unused]] void SortsVis::set_style(const char * _style) {
-    ait.set_style_rec(_style);
+void SortsVis::init_ait(int *array, int size, int pause) const{
+    if(sorted(array, size))
+        rand_array(array, size);
+    ait->init_array(array, size, pause);
 }
 
-[[maybe_unused]] void SortsVis::set_size_window(int _height, int _weight) {
-    ait.set_size_window(&_height, &_weight);
+bool SortsVis::sorted(const int *array, int size) {
+    for(int i=1; i<size;i++)
+        if(array[i-1] > array[i])
+            return false;
+    return true;
+}
+
+void SortsVis::run(int *, int, int){}
+
+[[maybe_unused]] void SortsVis::set_style(const char * _style) const {
+    ait->set_style_rec(_style);
+}
+
+[[maybe_unused]] void SortsVis::set_size_window(int _height, int _weight) const {
+    ait->set_size_window(_height, _weight);
 }
