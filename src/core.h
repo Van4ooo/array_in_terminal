@@ -59,6 +59,7 @@ private:
 public:
     bool shuffle = false;
     bool _init = false;
+    bool full_draw = false;
 
     void init_array(int *, int, int);
 
@@ -82,6 +83,10 @@ public:
 
     void clear_table();
 
+    static void clear_window();
+
+    void hide_cursor();
+
     void reset_color_rectangles(int, int);
 
     void reset_color_rectangles_set(int);
@@ -97,6 +102,8 @@ public:
     void write_symbol_with_checking(int, int, char);
 
     void set_name_alg(std::string);
+
+    [[maybe_unused]] void full_rec_draw(bool);
 
     [[maybe_unused]] void set_style_rec(const char *);
     [[maybe_unused]] void set_size_window(int, int);

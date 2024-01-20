@@ -8,6 +8,8 @@ int main() {
     SortsVis::init_array(arr1, n1);
     ArrayInTerminal ait = ArrayInTerminal();
 
+    ait.full_rec_draw(true);
+
     MergeSort{&ait}.run(arr1, n1, 0);
     QuickSort{&ait}.run(arr1, n1, 0);
     HeapSort{&ait}.run(arr1, n1, 0);

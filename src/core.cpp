@@ -6,7 +6,10 @@ void ArrayInTerminal::init_array(int *array, int size, int p){
     if (!_init) {
         set_size_window(height, weight);
         setting = GetStdHandle(STD_OUTPUT_HANDLE);
-    }
+
+        hide_cursor();
+    } else if(last_size != size ) clear_window();
+
     wx = weight/size;
     right_shift = weight - wx*size;
     hx = (float)height/(float)_max(array, size);
@@ -44,11 +47,13 @@ void ArrayInTerminal::swap(int* xp, int* yp, int i1, int i2){
     std::cout << colors.SWAP;
 
     if (*xp > *yp){
-        print_rectangles(i1, last[i1], last[i2]);
+        print_rectangles(i1, last[i1], full_draw ? 0 : last[i2]);
         clear_rectangles(i2, last[i1], last[i2]);
+        print_rectangles(i2, last[i2], full_draw ? 0: last[i2]);
     } else{
-        print_rectangles(i2, last[i2], last[i1]);
+        print_rectangles(i2, last[i2], full_draw ? 0: last[i1]);
         clear_rectangles(i1, last[i2], last[i1]);
+        print_rectangles(i1, last[i1], full_draw ? 0 : last[i1]);
     }
 
     usleep(1000*pause);
@@ -178,6 +183,30 @@ void ArrayInTerminal::clear_table() {
             write_symbol(dx, dy, ' ');
 }
 
+void ArrayInTerminal::clear_window() {
+#if defined _WIN32
+    system("cls");
+#elif defined (__LINUX__) || defined(__gnu_linux__) || defined(__linux__)
+    system("clear");
+#elif defined (__APPLE__)
+    system("clear");
+#endif
+}
+
+void ArrayInTerminal::hide_cursor() {
+#if defined _WIN32
+    CONSOLE_CURSOR_INFO cursorInfo;
+    GetConsoleCursorInfo(setting, &cursorInfo);
+    cursorInfo.bVisible = false;
+    SetConsoleCursorInfo(setting, &cursorInfo);
+
+#elif defined (__LINUX__) || defined(__gnu_linux__) || defined(__linux__)
+    std::cout << "\033[?25l";
+#elif defined (__APPLE__)
+    std::cout << "\033[?25l";
+#endif
+}
+
 void ArrayInTerminal::print_head(int x, int y) {
     write_symbol_with_checking(x, y, style.lf_corner);
 
@@ -234,6 +263,10 @@ void ArrayInTerminal::_sorted() {
         print_rectangles(i, last[i], 0);
         usleep(900);
     }
+}
+
+[[maybe_unused]] void ArrayInTerminal::full_rec_draw(bool status) {
+    full_draw = status;
 }
 
 SortsVis::SortsVis(ArrayInTerminal *a) : ait(a){
