@@ -12,6 +12,7 @@ int main() {
 
     MergeSort{&ait}.run(arr1, n1, 0);
     QuickSort{&ait}.run(arr1, n1, 0);
+    QuickSort{&ait}.run(arr1, n1, 0);
     HeapSort{&ait}.run(arr1, n1, 0);
     RadixSort{&ait}.run(arr1, n1, 5);
 
