@@ -2,6 +2,8 @@
 
 Simple and flexible CLI toolkit for visualization any sorting algorithms. You can see how it works in the video
 
+https://github.com/Van4ooo/array_in_terminal/assets/61797682/5af7ea29-160c-424b-ba31-bec694d2b3b6
+
 In the video, you can see rectangles of different widths, because **ArrayInTerminal automatically sets** their width depending on the size of the input array.
 Therefore, the size of the input array can be any, but **within 2 and windows.width**.
 You can run the sorting algorithm in two ways:
