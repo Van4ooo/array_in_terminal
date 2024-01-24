@@ -4,14 +4,14 @@
 
 void ArrayInTerminal::init_array(int *array, int size, int p){
     if (!_init) {
-        set_size_window(height, weight);
+        set_size_window(height, width);
         setting = GetStdHandle(STD_OUTPUT_HANDLE);
 
         hide_cursor();
     } else if(last_size != size ) clear_window();
 
-    wx = weight/size;
-    right_shift = weight - wx*size;
+    wx = width/size;
+    right_shift = width - wx*size;
     hx = (float)height/(float)_max(array, size);
 
     last = array;
@@ -142,8 +142,8 @@ void ArrayInTerminal::_write_rectangles(bool mod, int index, int el, int last_el
 }
 
 void ArrayInTerminal::_write_border_rec(int x, int y, int last_y) {
-    for (int dy = y; dy <= last_y; dy++) {
-        write_symbol_with_checking(x, dy, style.border);
+    for (int dy = y+1; dy <= last_y; dy++) {
+        write_symbol_with_checking(x, dy,(style.border == ' ' && wx == 1)? style.body : style.border);
     }
 }
 
@@ -246,12 +246,12 @@ void ArrayInTerminal::set_style_rec(const char *_style) {
     style.rh_corner = _style[4];
 }
 
-void ArrayInTerminal::set_size_window(int _height, int _weight) {
+void ArrayInTerminal::set_size_window(int _height, int _width) {
     height = (SHORT)_height;
-    weight = (SHORT)_weight;
+    width = (SHORT)_width;
 
     char form_string[15];
-    std::sprintf(form_string, "mode %i, %i", weight, height);
+    std::sprintf(form_string, "mode %i, %i", width, height);
 
     system(form_string);
 }
@@ -268,6 +268,9 @@ void ArrayInTerminal::_sorted() {
 [[maybe_unused]] void ArrayInTerminal::full_rec_draw(bool status) {
     full_draw = status;
 }
+
+SHORT ArrayInTerminal::w() const { return width; }
+SHORT ArrayInTerminal::h() const { return height; }
 
 SortsVis::SortsVis(ArrayInTerminal *a) : ait(a){
 }
@@ -299,7 +302,6 @@ void SortsVis::rand_run(int size, int pause) {
     ait->_init = false;
 
     init_array(array, size);
-    rand_array(array, size);
     run(array, size, pause);
 
     delete[] array;
@@ -324,6 +326,9 @@ void SortsVis::run(int *, int, int){}
     ait->set_style_rec(_style);
 }
 
-[[maybe_unused]] void SortsVis::set_size_window(int _height, int _weight) const {
-    ait->set_size_window(_height, _weight);
+[[maybe_unused]] void SortsVis::set_size_window(int _height, int _width) const {
+    ait->set_size_window(_height, _width);
 }
+
+[[maybe_unused]] SHORT SortsVis::width() const{ return ait->w(); }
+[[maybe_unused]] SHORT SortsVis::height() const{ return ait->h(); }

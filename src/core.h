@@ -36,7 +36,7 @@ class ArrayInTerminal{
 private:
     HANDLE setting{};
     COORD position{};
-    SHORT height=46, weight=200;
+    SHORT height=36, width=142;
 
     int wx{}, _min{}, right_shift{};
     float hx{};
@@ -107,6 +107,9 @@ public:
 
     [[maybe_unused]] void set_style_rec(const char *);
     [[maybe_unused]] void set_size_window(int, int);
+
+    [[maybe_unused]] [[nodiscard]] SHORT w() const;
+    [[maybe_unused]] [[nodiscard]] SHORT h() const;
 };
 
 class SortsVis{
@@ -127,6 +130,9 @@ public:
 
     [[maybe_unused]] void set_style(const char *) const;
     [[maybe_unused]] void set_size_window(int, int) const;
+
+    [[maybe_unused]] [[nodiscard]] SHORT width() const;
+    [[maybe_unused]] [[nodiscard]] SHORT height() const;
 };
 
 #endif //ARRAY_IN_TERMINAL_CORE_H
